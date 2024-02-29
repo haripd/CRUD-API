@@ -1,21 +1,24 @@
+// const userRouter = require('express').Router()
+
 const express = require('express')
 const userRoute = express.Router()
 
-const { readAll, singleUser, updateUser, deleteUser, createUser } = require('../controller/userController')
+const { readAll, createUser, updateUser, deleteUser, readSingle } = require('../controller/userController')
 
-//read all the users => get request method  /api/user/all
+
+// read all users => get request method /api/user/all
 userRoute.get(`/all`, readAll)
 
-//read single => /api/user/single/123
-userRoute.get(`/single/:id`, singleUser)
+// read single -> /api/user/single/123
+userRoute.get(`/single/:userId`, readSingle)
 
-//create the user => post request -> /api/user/create
-userRoute.get(`/create`, createUser)
+// create new user => post request  -> /api/user/create
+userRoute.post(`/create`, createUser)
 
-//update the existing user => patch method -> /api/user/update/123
-userRoute.get(`/update/:id`, updateUser)
+// update existing user => patch request -> /api/user/update/123
+userRoute.patch(`/update/:id`, updateUser)
 
-//delete the user => delete method -> /api/user/delete/123
-userRoute.get(`/delete/:id`, deleteUser)
+// delete existing user => delete request -> /api/user/delete/123
+userRoute.delete(`/delete/:id`, deleteUser)
 
 module.exports = userRoute

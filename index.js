@@ -1,30 +1,45 @@
 const express = require('express')
-//settting to access .env variables
-
+// settings to access .env variables
 require('dotenv').config()
-// const connectDB = require('./db/connect')
-// const cors = require('cors')
-const port = process.env.PORT
-// const port = 4500
+const connectDb = require('./db/connect')
+const cors = require('cors')
 
-//instance to express
+const PORT = process.env.PORT
+
+// instance of exrpess
 const app = express()
 
-//app.get(route, controller)
-//index route - get request method
-app.get(`/`, function(req, res){
-    res.status(200).json({status: true, msg: "Welcome to CRUD API"})
+// body parser middleware
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+// middleware 
+// cors => cross origin resource sharing
+app.use(cors())
+
+// index route
+app.get(`/`,(req,res) => {
+    res.status(200).json({ status: true, msg: "Welcome to CRUD API"}) 
 })
 
-//connecting to router => app.use(path, router)
-app.use(`/api/user`, require('./route/userRoute'))
 
-//default route
-app.all('**', (req, res)=>{
-    res.status(404).json({status: true, msg: `Requested path not found`})
+// connecting router => app.use(path,router)
+app.use(`/api/user`,require('./route/userRoute'))
+
+
+// default route
+app.all('**', (req,res) => {
+    res.status(404).json({ status: true, msg: `requested path not found`})
 })
 
-//call server listen property
-app.listen(port, ()=>{
-    console.log(`server is running at http://localhost:${port}`)
+// server listen
+app.listen(PORT,() => {
+    if(process.env.MODE === "development") {
+        // to connect local database
+        connectDb(process.env.MONGO_DEV)
+    } else if(process.env.MODE === "production") {
+        // to connect cloud database
+        connectDb(process.env.MONGO_URL)
+    }
+    console.log(`server is running @ http://localhost:${PORT}`)
 })

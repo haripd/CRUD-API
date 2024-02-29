@@ -1,11 +1,11 @@
-const express = require('../model/user')
+// const express = require('../model/user')
 //read all users
 // const readAll = function(req, res){
 // res.status(200).json({status : true, msg: "read all users"})
 // }
 
 const readAll = async (req, res)=>{
-    let users = await User.find()
+    // let users = await User.find()
     res.status(200).json({status: true, length: users.length, users})
 }
 
